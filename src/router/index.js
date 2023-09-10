@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js'
 import DashboardView from '../views/DashboardView.vue'
 
 const router = createRouter({
@@ -7,7 +8,23 @@ const router = createRouter({
     {
       path: '/',
       name: 'dashboard',
-      component: DashboardView
+      component: DashboardView,
+      meta: {
+        auth: true,
+        title: 'Dashboard'
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      // route level code-splitting
+      // this generates a separate chunk (Login.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ProfileView.vue'),
+      meta: {
+        auth: true,
+        title: 'Profile'
+      }
     },
     {
       path: '/login',
@@ -15,7 +32,11 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (Login.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      meta: {
+        auth: false,
+        title: 'Login'
+      }
     },
     {
       path: '/register',
@@ -23,9 +44,21 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (Login.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/RegisterView.vue')
+      component: () => import('../views/RegisterView.vue'),
+      meta: {
+        auth: false,
+        title: 'Register'
+      }
     }
   ]
+})
+
+router.beforeEach((to, from) => {
+  const authStore = useAuthStore()
+
+  if (to.meta.auth && !authStore.authUser) {
+    return { name: 'login' }
+  }
 })
 
 export default router
