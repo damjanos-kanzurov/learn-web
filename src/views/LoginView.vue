@@ -12,8 +12,6 @@ const loginForm = reactive({
 })
 
 function login() {
-  console.log('user', loginForm)
-
   axios
     .get(`/sanctum/csrf-cookie`)
     .then(() => {
@@ -23,7 +21,8 @@ function login() {
       })
     })
     .catch((err) => {
-      console.error('ERROR OCCURED', err)
+      console.error(err)
+      toast.error('Unable to login user, please try again')
     })
 }
 </script>
@@ -33,7 +32,7 @@ function login() {
     <!-- Login form -->
     <p class="text-2xl font-bold uppercase">Spendlog</p>
     <div class="w-full max-w-sm">
-      <div class="mt-8 space-y-4">
+      <form class="mt-8 space-y-4" @submit.prevent="login">
         <div class="w-full">
           <label class="text-sm mb-1 block" for="email">Email address</label>
           <input
@@ -54,15 +53,18 @@ function login() {
             v-model="loginForm.password"
           />
         </div>
+        <div class="w-full text-right">
+          <RouterLink to="/forgot-password"> Forgot password? </RouterLink>
+        </div>
         <div class="w-full">
           <button
+            type="submit"
             class="px-4 py-2 w-full inline-flex justify-center bg-gray-950 text-white uppercase"
-            @click="login"
           >
             Sign in
           </button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
   <!-- Don't have an account -->

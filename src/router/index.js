@@ -49,6 +49,56 @@ const router = createRouter({
         auth: false,
         title: 'Register'
       }
+    },
+    {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      // route level code-splitting
+      // this generates a separate chunk (Login.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ForgotPasswordView.vue'),
+      meta: {
+        auth: false,
+        title: 'Forgot Password'
+      }
+    },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      // route level code-splitting
+      // this generates a separate chunk (Login.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ResetPasswordView.vue'),
+      meta: {
+        auth: false,
+        title: 'Reset Password'
+      }
+    },
+    {
+      path: '/logger',
+      name: 'logger',
+      // route level code-splitting
+      // this generates a separate chunk (Login.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/LoggerView.vue'),
+      children: [
+        {
+          name: 'expense',
+          path: 'expense',
+          component: () => import('../components/tabs/Expense.vue'),
+          meta: { name: 'Expense' }
+        },
+        {
+          name: 'income',
+          path: 'income',
+          component: () => import('../components/tabs/Income.vue'),
+          meta: { name: 'Income' }
+        }
+      ],
+      meta: {
+        auth: false,
+        title: 'Logger - Add spendlogs'
+      }
     }
   ]
 })

@@ -9,6 +9,11 @@ const router = useRouter()
 const hasAuthUser = computed(() => {
   return Boolean(authStore.authUser)
 })
+const authUserFullName = computed(() => {
+  return hasAuthUser.value
+    ? authStore.authUser.first_name + ' ' + authStore.authUser.last_name
+    : null
+})
 
 function logout() {
   axios
@@ -26,20 +31,23 @@ function logout() {
         <!-- Nav logo -->
         <div class="mr-12">
           <p class="text-lg font-bold uppercase">
-            <RouterLink to="/"> Spendlog </RouterLink>
+            <RouterLink :to="{ name: 'dashboard' }"> Spendlog </RouterLink>
           </p>
         </div>
         <!-- Nav links -->
         <ul class="flex space-x-6">
           <li class="text-base">
-            <RouterLink to="/"> Dashboard </RouterLink>
+            <RouterLink :to="{ name: 'dashboard' }"> Dashboard </RouterLink>
           </li>
           <li class="text-base">
-            <RouterLink to="/profile"> Profile </RouterLink>
+            <RouterLink :to="{ name: 'expense' }"> Logger </RouterLink>
           </li>
         </ul>
         <!-- Profile/Sign in -->
-        <div class="ml-auto">
+        <div class="flex ml-auto">
+          <p class="text-base mr-12" v-if="hasAuthUser">
+            <RouterLink to="/profile"> {{ authUserFullName }} </RouterLink>
+          </p>
           <p class="text-base">
             <RouterLink to="/login" v-if="!hasAuthUser"> Sign in </RouterLink>
             <button @click="logout" v-else>Log out</button>

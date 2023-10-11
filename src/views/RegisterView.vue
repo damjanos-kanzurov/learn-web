@@ -1,7 +1,11 @@
 <script setup>
 import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
+const router = useRouter()
 const registerForm = reactive({
   first_name: '',
   last_name: '',
@@ -15,12 +19,14 @@ function register() {
   console.log('user', registerForm)
 
   axios
-    .post(`${APP_URL}/api/register`, registerForm)
+    .post(`/api/register`, registerForm)
     .then((res) => {
-      console.log('USER REGISTERED', res)
+      toast.success('User successfully registered')
+      router.push({ name: 'login' })
     })
     .catch((err) => {
-      console.error('ERROR OCCURED', err)
+      console.error(err)
+      toast.error('Error occured')
     })
 }
 </script>
